@@ -1,5 +1,14 @@
-import { FC, useState } from "react";
-import { Todo, TodoListProps } from "../types/todo";
+import { Box, List, Paper, Typography } from "@mui/material";
+import { FC } from "react";
+import { Todo } from "../types/todo";
+import TodoItem from "./TodoItem";
+
+interface TodoListProps {
+  todos: Todo[];
+  onRemoveTodo: (id: string) => void;
+  onToggleComplete: (id: string) => void;
+  onUpdateTodo: (id: string, newTask: string) => void;
+}
 
 const TodoList: FC<TodoListProps> = ({
   todos,
@@ -7,92 +16,33 @@ const TodoList: FC<TodoListProps> = ({
   onToggleComplete,
   onUpdateTodo,
 }) => {
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editTask, setEditTask] = useState<string>("");
-
-  const handleEditStart = (todo: Todo) => {
-    setEditingId(todo.id);
-    setEditTask(todo.task);
-  };
-
-  const handleEditSave = (id: string) => {
-    if (editTask.trim()) {
-      onUpdateTodo(id, editTask.trim());
-    }
-    setEditingId(null);
-    setEditTask("");
-  };
-
-  const handleEditCancel = () => {
-    setEditingId(null);
-    setEditTask("");
-  };
-
   return (
-    <div className="todo-list-container">
+    <Paper elevation={2} sx={{ minHeight: 300, boxShadow: "none" }}>
       {todos.length === 0 ? (
-        <p className="empty-message">No todos yet. Add one above!</p>
+        <Box sx={{ p: 4, textAlign: "center" }}>
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ fontStyle: "italic" }}
+          >
+            No todos yet. Add one above!
+          </Typography>
+        </Box>
       ) : (
-        <ul className="todo-list">
-          {todos.map((todo) => (
-            <li
+        <List sx={{ p: 0 }}>
+          {todos.map((todo, index) => (
+            <TodoItem
               key={todo.id}
-              className={`todo-item ${todo.isCompleted ? "completed" : ""}`}
-            >
-              {editingId === todo.id ? (
-                <div className="edit-mode">
-                  <input
-                    type="text"
-                    value={editTask}
-                    onChange={(e) => setEditTask(e.target.value)}
-                    className="edit-input"
-                    autoFocus
-                  />
-                  <div className="edit-actions">
-                    <button
-                      onClick={() => handleEditSave(todo.id)}
-                      className="save-btn"
-                    >
-                      Save
-                    </button>
-                    <button onClick={handleEditCancel} className="cancel-btn">
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="view-mode">
-                  <div className="todo-content">
-                    <input
-                      type="checkbox"
-                      checked={todo.isCompleted}
-                      onChange={() => onToggleComplete(todo.id)}
-                      className="todo-checkbox"
-                    />
-                    <span className="todo-text">{todo.task}</span>
-                  </div>
-                  <div className="todo-actions">
-                    <button
-                      onClick={() => handleEditStart(todo)}
-                      className="edit-btn"
-                      disabled={todo.isCompleted}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => onRemoveTodo(todo.id)}
-                      className="remove-btn"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              )}
-            </li>
+              todo={todo}
+              onRemove={onRemoveTodo}
+              onToggleComplete={onToggleComplete}
+              onUpdate={onUpdateTodo}
+              showDivider={index < todos.length - 1}
+            />
           ))}
-        </ul>
+        </List>
       )}
-    </div>
+    </Paper>
   );
 };
 

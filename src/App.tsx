@@ -1,11 +1,49 @@
-import React, { useState } from "react";
+import { CheckCircle, RadioButtonUnchecked } from "@mui/icons-material";
+import {
+  Box,
+  Chip,
+  Container,
+  createTheme,
+  CssBaseline,
+  Paper,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+import { FC, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import "./App.css";
 import TodoInput from "./components/TodoInput";
 import TodoList from "./components/TodoList";
 import { Todo } from "./types/todo";
 
-const App: React.FC = () => {
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#3b8223",
+    },
+    background: {
+      default: "#f8fafc",
+    },
+  },
+  typography: {
+    h3: {
+      fontWeight: 700,
+    },
+  },
+  components: {
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        },
+      },
+    },
+  },
+});
+
+const App: FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const addTodo = (task: string) => {
@@ -35,32 +73,58 @@ const App: React.FC = () => {
     );
   };
 
+  const completedCount = todos.filter((todo) => todo.isCompleted).length;
+
   return (
-    <div className="app">
-      <div className="container">
-        <header className="app-header">
-          <h1>Todo App</h1>
-          <p>Manage your tasks efficiently</p>
-        </header>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container maxWidth="md">
+        <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+          <Box sx={{ textAlign: "center", mb: 4 }}>
+            <Typography variant="h3" color="primary" gutterBottom>
+              Todo List
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Manage your tasks efficiently
+            </Typography>
+          </Box>
 
-        <main className="app-main">
-          <TodoInput onAddTodo={addTodo} />
-          <TodoList
-            todos={todos}
-            onRemoveTodo={removeTodo}
-            onToggleComplete={toggleComplete}
-            onUpdateTodo={updateTodo}
-          />
-        </main>
+          <Box sx={{ mb: 4 }}>
+            <TodoInput onAddTodo={addTodo} />
+            <TodoList
+              todos={todos}
+              onRemoveTodo={removeTodo}
+              onToggleComplete={toggleComplete}
+              onUpdateTodo={updateTodo}
+            />
+          </Box>
 
-        <footer className="app-footer">
-          <p>
-            Total: {todos.length} | Completed:{" "}
-            {todos.filter((t) => t.isCompleted).length}
-          </p>
-        </footer>
-      </div>
-    </div>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              gap: 2,
+              pt: 3,
+              borderTop: 1,
+              borderColor: "divider",
+            }}
+          >
+            <Chip
+              icon={<RadioButtonUnchecked />}
+              label={`Total: ${todos.length}`}
+              variant="outlined"
+              color="primary"
+            />
+            <Chip
+              icon={<CheckCircle />}
+              label={`Completed: ${completedCount}`}
+              variant="outlined"
+              color="success"
+            />
+          </Box>
+        </Paper>
+      </Container>
+    </ThemeProvider>
   );
 };
 

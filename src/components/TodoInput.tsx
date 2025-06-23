@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import { Add as AddIcon } from "@mui/icons-material";
+import { Box, Button, Paper, TextField } from "@mui/material";
+import { FC, FormEvent, useState } from "react";
+import { TodoInputProps } from "../types/todo";
 
-interface TodoInputProps {
-  onAddTodo: (task: string) => void;
-}
-
-const TodoInput: React.FC<TodoInputProps> = ({ onAddTodo }) => {
+const TodoInput: FC<TodoInputProps> = ({ onAddTodo }) => {
   const [task, setTask] = useState<string>("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (task.trim()) {
       onAddTodo(task.trim());
@@ -16,20 +15,32 @@ const TodoInput: React.FC<TodoInputProps> = ({ onAddTodo }) => {
   };
 
   return (
-    <div className="todo-input-container">
-      <form onSubmit={handleSubmit} className="todo-form">
-        <input
-          type="text"
+    <Paper elevation={2} sx={{ p: 2, mb: 3, boxShadow: "none" }}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{ display: "flex", gap: 1 }}
+      >
+        <TextField
+          fullWidth
           value={task}
           onChange={(e) => setTask(e.target.value)}
           placeholder="Add a new todo..."
-          className="todo-input"
+          variant="outlined"
+          size="small"
         />
-        <button type="submit" className="add-btn">
-          Add Todo
-        </button>
-      </form>
-    </div>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          startIcon={<AddIcon />}
+          size="small"
+          sx={{ minWidth: 100 }}
+        >
+          Add
+        </Button>
+      </Box>
+    </Paper>
   );
 };
 

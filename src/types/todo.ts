@@ -14,3 +14,11 @@ export interface TodoListProps {
 export interface TodoInputProps {
   onAddTodo: (task: string) => void;
 }
+
+export interface TodoItemProps {
+  todo: Todo;
+  onRemove: (id: string) => void;
+  onToggleComplete: (id: string) => void;
+  onUpdate: (id: string, newTask: string) => void;
+  showDivider?: boolean;
+}
