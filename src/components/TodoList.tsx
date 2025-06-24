@@ -1,21 +1,10 @@
 import { Box, List, Paper, Typography } from "@mui/material";
 import { FC } from "react";
-import { Todo } from "../types/todo";
+import { useTodoStore } from "../store/todoStore";
 import TodoItem from "./TodoItem";
 
-interface TodoListProps {
-  todos: Todo[];
-  onRemoveTodo: (id: string) => void;
-  onToggleComplete: (id: string) => void;
-  onUpdateTodo: (id: string, newTask: string) => void;
-}
-
-const TodoList: FC<TodoListProps> = ({
-  todos,
-  onRemoveTodo,
-  onToggleComplete,
-  onUpdateTodo,
-}) => {
+const TodoList: FC = () => {
+  const { todos } = useTodoStore();
   return (
     <Paper elevation={2} sx={{ minHeight: 300, boxShadow: "none" }}>
       {todos.length === 0 ? (
@@ -31,13 +20,7 @@ const TodoList: FC<TodoListProps> = ({
       ) : (
         <List sx={{ p: 0 }}>
           {todos.map((todo) => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              onRemove={onRemoveTodo}
-              onToggleComplete={onToggleComplete}
-              onUpdate={onUpdateTodo}
-            />
+            <TodoItem key={todo.id} todo={todo} />
           ))}
         </List>
       )}

@@ -15,17 +15,13 @@ import {
   TextField,
 } from "@mui/material";
 import { FC, KeyboardEvent, useState } from "react";
+import { useTodoStore } from "../store/todoStore";
 import { TodoItemProps } from "../types/todo";
 
-const TodoItem: FC<TodoItemProps> = ({
-  todo,
-  onRemove,
-  onToggleComplete,
-  onUpdate,
-  showDivider = false,
-}) => {
+const TodoItem: FC<TodoItemProps> = ({ todo }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editTask, setEditTask] = useState<string>("");
+  const { updateTodo, removeTodo, toggleComplete } = useTodoStore();
 
   const handleEditStart = () => {
     setIsEditing(true);
@@ -34,7 +30,7 @@ const TodoItem: FC<TodoItemProps> = ({
 
   const handleEditSave = () => {
     if (editTask.trim()) {
-      onUpdate(todo.id, editTask.trim());
+      updateTodo(todo.id, editTask.trim());
     }
     setIsEditing(false);
     setEditTask("");
@@ -65,7 +61,6 @@ const TodoItem: FC<TodoItemProps> = ({
         p: 1,
         borderRadius: 2,
       }}
-      divider={showDivider}
     >
       {isEditing ? (
         <Box
@@ -119,7 +114,7 @@ const TodoItem: FC<TodoItemProps> = ({
           <ListItemIcon>
             <Checkbox
               checked={todo.isCompleted}
-              onChange={() => onToggleComplete(todo.id)}
+              onChange={() => toggleComplete(todo.id)}
               color="primary"
             />
           </ListItemIcon>
@@ -145,7 +140,7 @@ const TodoItem: FC<TodoItemProps> = ({
               <EditIcon fontSize="small" />
             </IconButton>
             <IconButton
-              onClick={() => onRemove(todo.id)}
+              onClick={() => removeTodo(todo.id)}
               color="error"
               size="small"
               title="Delete todo"

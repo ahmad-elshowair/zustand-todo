@@ -43,8 +43,7 @@ const theme = createTheme({
 });
 
 const App: FC = () => {
-  const { todos, addTodo, removeTodo, toggleComplete, updateTodo } =
-    useTodoStore();
+  const { todos } = useTodoStore();
 
   const completedCount = todos.filter((todo) => todo.isCompleted).length;
 
@@ -63,13 +62,8 @@ const App: FC = () => {
           </Box>
 
           <Box sx={{ mb: 4 }}>
-            <TodoInput onAddTodo={addTodo} />
-            <TodoList
-              todos={todos}
-              onRemoveTodo={removeTodo}
-              onToggleComplete={toggleComplete}
-              onUpdateTodo={updateTodo}
-            />
+            <TodoInput />
+            <TodoList />
           </Box>
 
           <Box

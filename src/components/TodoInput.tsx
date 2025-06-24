@@ -1,15 +1,16 @@
 import { Add as AddIcon } from "@mui/icons-material";
 import { Box, Button, Paper, TextField } from "@mui/material";
 import { FC, FormEvent, useState } from "react";
-import { TodoInputProps } from "../types/todo";
+import { useTodoStore } from "../store/todoStore";
 
-const TodoInput: FC<TodoInputProps> = ({ onAddTodo }) => {
+const TodoInput: FC = () => {
   const [task, setTask] = useState<string>("");
+  const { addTodo } = useTodoStore();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (task.trim()) {
-      onAddTodo(task.trim());
+      addTodo(task.trim());
       setTask("");
     }
   };
