@@ -9,11 +9,10 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import { FC, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { FC } from "react";
 import TodoInput from "./components/TodoInput";
 import TodoList from "./components/TodoList";
-import { Todo } from "./types/todo";
+import { useTodoStore } from "./store/todoStore";
 
 const theme = createTheme({
   palette: {
@@ -44,34 +43,8 @@ const theme = createTheme({
 });
 
 const App: FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-
-  const addTodo = (task: string) => {
-    const newTodo: Todo = {
-      id: uuidv4(),
-      task,
-      isCompleted: false,
-    };
-    setTodos((prev) => [...prev, newTodo]);
-  };
-
-  const removeTodo = (id: string) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id));
-  };
-
-  const toggleComplete = (id: string) => {
-    setTodos((prev) =>
-      prev.map((todo) =>
-        todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo
-      )
-    );
-  };
-
-  const updateTodo = (id: string, newTask: string) => {
-    setTodos((prev) =>
-      prev.map((todo) => (todo.id === id ? { ...todo, task: newTask } : todo))
-    );
-  };
+  const { todos, addTodo, removeTodo, toggleComplete, updateTodo } =
+    useTodoStore();
 
   const completedCount = todos.filter((todo) => todo.isCompleted).length;
 

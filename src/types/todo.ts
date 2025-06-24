@@ -4,6 +4,14 @@ export interface Todo {
   isCompleted: boolean;
 }
 
+export interface TodoStore {
+  todos: Todo[];
+  addTodo: (task: string) => void;
+  updateTodo: (id: string, task: string) => void;
+  removeTodo: (id: string) => void;
+  toggleComplete: (id: string) => void;
+}
+
 export interface TodoListProps {
   todos: Todo[];
   onRemoveTodo: (id: string) => void;

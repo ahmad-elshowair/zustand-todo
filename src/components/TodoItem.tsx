@@ -62,6 +62,8 @@ const TodoItem: FC<TodoItemProps> = ({
         "&:hover": {
           backgroundColor: "action.hover",
         },
+        p: 1,
+        borderRadius: 2,
       }}
       divider={showDivider}
     >
@@ -128,7 +130,7 @@ const TodoItem: FC<TodoItemProps> = ({
               color: todo.isCompleted ? "text.secondary" : "text.primary",
               "& .MuiListItemText-primary": {
                 fontSize: "1rem",
-                fontWeight: todo.isCompleted ? 400 : 500,
+                fontWeight: todo.isCompleted ? 400 : 600,
               },
             }}
           />

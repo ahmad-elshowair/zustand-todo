@@ -30,14 +30,13 @@ const TodoList: FC<TodoListProps> = ({
         </Box>
       ) : (
         <List sx={{ p: 0 }}>
-          {todos.map((todo, index) => (
+          {todos.map((todo) => (
             <TodoItem
               key={todo.id}
               todo={todo}
               onRemove={onRemoveTodo}
               onToggleComplete={onToggleComplete}
               onUpdate={onUpdateTodo}
-              showDivider={index < todos.length - 1}
             />
           ))}
         </List>
